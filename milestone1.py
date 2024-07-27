@@ -1,6 +1,3 @@
-To ensure that the main fields overlap less, we can adjust the placement logic to place fields more efficiently, potentially reducing unnecessary overlap. Here's an updated version of the script that aims to minimize overlaps:
-
-```python
 import pandas as pd
 import math
 
@@ -27,9 +24,15 @@ def main_field_placer():
         for i in range(x_steps):
             for j in range(y_steps):
                 main_field_x1 = x1 + (i * main_field_size)
-                main_field_x2 = min(main_field_x1 + main_field_size, x2)  # Ensure it doesn't go beyond x2
+                main_field_x2 = main_field_x1 + main_field_size
                 main_field_y1 = y1 + (j * main_field_size)
-                main_field_y2 = min(main_field_y1 + main_field_size, y2)  # Ensure it doesn't go beyond y2
+                main_field_y2 = main_field_y1 + main_field_size
+                
+                # Ensure fields do not go beyond specified area boundaries
+                if main_field_x2 > x2:
+                    main_field_x2 = x2
+                if main_field_y2 > y2:
+                    main_field_y2 = y2
                 
                 main_field_list.append([main_field_x1, main_field_x2, main_field_y1, main_field_y2])
     
@@ -52,9 +55,15 @@ def subfield():
         for i in range(nx):
             for j in range(ny):
                 sf_x1 = x1 + i * sub_field_size
-                sf_x2 = min(sf_x1 + sub_field_size, x2)  # Ensure it doesn't go beyond x2
+                sf_x2 = sf_x1 + sub_field_size
                 sf_y1 = y1 + j * sub_field_size
-                sf_y2 = min(sf_y1 + sub_field_size, y2)  # Ensure it doesn't go beyond y2
+                sf_y2 = sf_y1 + sub_field_size
+                
+                # Ensure subfields do not go beyond specified area boundaries
+                if sf_x2 > x2:
+                    sf_x2 = x2
+                if sf_y2 > y2:
+                    sf_y2 = y2
                 
                 sf.append([sf_x1, sf_x2, sf_y1, sf_y2, index])
     
@@ -63,10 +72,3 @@ def subfield():
 # Generate and save subfields
 subfields = subfield()
 subfields.to_csv("subfields.csv", header=False, index=False)
-```
-
-### Changes Made:
-1. **Reduced Overlap**: Used `min` function to ensure the fields do not extend beyond the boundaries specified in `CareAreas.csv`.
-2. **Consistent Formatting**: Ensured the code is clean and readable.
-
-This should help in reducing the overlap of the main fields while still covering the required area.
